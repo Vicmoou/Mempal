@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Flashcard App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="rich-text-editor.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    
+    <div class="container">
+        <h1><i class="fas fa-brain"></i> Mem-all</h1>
+        
+        <div class="nav-buttons">
+            <button onclick="showSection('create')" class="nav-button" data-shortcut="N">
+                <i class="fas fa-plus-circle"></i> Create Cards
+            </button>
+            <button onclick="showSection('practice')" class="nav-button" data-shortcut="P">
+                <i class="fas fa-graduation-cap"></i> Practice Mode
+            </button>
+            <button onclick="showSection('stats')" class="nav-button" data-shortcut="S">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+            <a href="cards.html" class="nav-button">
+                <i class="fas fa-cards"></i> View All Cards
+            </a>
+            <a href="profile.html" class="nav-button">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <button onclick="logout()" class="nav-button">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <div id="createSection" class="section">
+            <div class="card-creation">
+                <h2>Create New Flashcard</h2>
+                
+                <div class="input-group">
+                    <label>Front:</label>
+                    <div id="frontTextEditor" class="rich-editor" contenteditable="true"></div>
+                    <div id="frontTextPreview" class="preview"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Back:</label>
+                    <div id="backTextEditor" class="rich-editor" contenteditable="true"></div>
+                    <div id="backTextPreview" class="preview"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Difficulty:</label>
+                    <select id="cardDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Category:</label>
+                    <select id="cardCategory">
+                        <option value="General">General</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="Language">Language</option>
+                        <option value="History">History</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Tags (comma-separated):</label>
+                    <input type="text" id="tagInput" placeholder="Enter tags...">
+                </div>
+                
+                <button onclick="addCard()" class="primary-button">Add Card</button>
+            </div>
+        </div>
+
+        <div id="practiceSection" class="section hidden">
+            <div class="study-section">
+                <div class="practice-settings">
+                    <select id="practiceCategory">
+                        <option value="all">All Categories</option>
+                        <option value="General">General</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="Language">Language</option>
+                        <option value="History">History</option>
+                    </select>
+                    <select id="practiceDifficulty">
+                        <option value="all">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Cards Reviewed: <span id="cardsReviewed">0</span>/<span id="totalCards">0</span></span>
+                        <span>Correct: <span id="correctAnswers">0</span></span>
+                        <span>Incorrect: <span id="incorrectAnswers">0</span></span>
+                    </div>
+                    <div id="studyTimer">Study Time: 00:00:00</div>
+                </div>
+                
+                <button onclick="startPractice()" class="primary-button">Start Practice</button>
+            </div>
+
+            <div id="practiceMode" class="practice-mode hidden">
+                <div id="currentCard" class="flashcard"></div>
+                <div class="answer-section">
+                    <input type="text" id="userAnswer" placeholder="Type your answer...">
+                    <button onclick="checkAnswer()" class="check-button">
+                        <i class="fas fa-check"></i> Check Answer
+                    </button>
+                    <div id="feedback" class="feedback"></div>
+                </div>
+                <button onclick="skipCard()" class="skip-button">
+                    <i class="fas fa-forward"></i> Skip Card
+                </button>
+                <button onclick="endPractice()" class="secondary-button">
+                    <i class="fas fa-times"></i> End Practice
+                </button>
+            </div>
+        </div>
+
+        <div id="statsSection" class="section hidden">
+            <h2>Statistics</h2>
+            <div class="stats-container">
+                <div class="stats-box">
+                    
+                    <h3>Overall Progress</h3>
+                    <div id="overallStats"></div>
+                </div>
+                <div class="stats-box">
+                    <h3>Category Performance</h3>
+                    <div id="categoryStats"></div>
+                </div>
+                <div class="stats-box">
+                    <h3>Study
+                    </h3>
+                    <div id="studyHistory"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+</body>
+</html>
+
+
