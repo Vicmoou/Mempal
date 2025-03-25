@@ -105,20 +105,16 @@ function deleteCard(id) {
 
 function startPractice() {
     const category = document.getElementById('practiceCategory').value;
-    const difficulty = document.getElementById('practiceDifficulty').value;
     
-    // Filter cards based on selected category and difficulty
+    // Filter cards based on selected category only
     let practiceCards = [...flashcards]; // Create a copy of flashcards array
     
     if (category !== 'all') {
         practiceCards = practiceCards.filter(card => card.category === category);
     }
-    if (difficulty !== 'all') {
-        practiceCards = practiceCards.filter(card => card.difficulty === difficulty);
-    }
 
     if (practiceCards.length === 0) {
-        alert('No cards available for practice with current filters. Try selecting different categories or difficulties.');
+        alert('No cards available for practice in this category. Please select a different category.');
         return;
     }
 
