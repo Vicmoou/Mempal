@@ -106,12 +106,10 @@ function deleteCard(id) {
 function startPractice() {
     const category = document.getElementById('practiceCategory').value;
     
-    // Filter cards based on selected category only
-    let practiceCards = [...flashcards]; // Create a copy of flashcards array
-    
-    if (category !== 'all') {
-        practiceCards = practiceCards.filter(card => card.category === category);
-    }
+    // Filter cards based on selected category
+    let practiceCards = category === 'all' 
+        ? [...flashcards] 
+        : flashcards.filter(card => card.category === category);
 
     if (practiceCards.length === 0) {
         alert('No cards available for practice in this category. Please select a different category.');
@@ -120,17 +118,15 @@ function startPractice() {
 
     // Shuffle cards for random practice
     practiceCards = practiceCards.sort(() => Math.random() - 0.5);
-    
-    // Update practice session setup
     currentCardIndex = 0;
     correctCount = 0;
     incorrectCount = 0;
     
-    document.querySelector('.study-section').classList.add('hidden');
-    document.getElementById('practiceMode').classList.remove('hidden');
-    
     // Store practice cards for this session
     sessionStorage.setItem('practiceCards', JSON.stringify(practiceCards));
+    
+    document.querySelector('.study-section').classList.add('hidden');
+    document.getElementById('practiceMode').classList.remove('hidden');
     
     displayCurrentCard();
     startTimer();
@@ -138,7 +134,8 @@ function startPractice() {
 }
 
 function displayCurrentCard() {
-    const card = flashcards[currentCardIndex];
+    const practiceCards = JSON.parse(sessionStorage.getItem('practiceCards'));
+    const card = practiceCards[currentCardIndex];
     document.getElementById('currentCard').innerHTML = card.front;
     document.getElementById('userAnswer').value = '';
     document.getElementById('feedback').innerHTML = '';
@@ -147,7 +144,8 @@ function displayCurrentCard() {
 
 function checkAnswer() {
     const userAnswer = document.getElementById('userAnswer').value.trim().toLowerCase();
-    const currentCard = flashcards[currentCardIndex];
+    const practiceCards = JSON.parse(sessionStorage.getItem('practiceCards'));
+    const currentCard = practiceCards[currentCardIndex];
     
     // Strip HTML from the answer before comparing
     const correctAnswer = stripHtml(currentCard.back).toLowerCase().trim();
@@ -172,6 +170,12 @@ function checkAnswer() {
         document.getElementById('feedback').className = 'feedback incorrect';
     }
 
+    // Update the original flashcards array with the updated stats
+    const originalCard = flashcards.find(c => c.id === currentCard.id);
+    if (originalCard) {
+        originalCard.stats = currentCard.stats;
+    }
+
     updateProgress();
     saveToLocalStorage();
 }
@@ -188,8 +192,9 @@ function skipCard() {
 }
 
 function nextCard() {
+    const practiceCards = JSON.parse(sessionStorage.getItem('practiceCards'));
     currentCardIndex++;
-    if (currentCardIndex >= flashcards.length) {
+    if (currentCardIndex >= practiceCards.length) {
         endPractice();
     } else {
         displayCurrentCard();
@@ -198,7 +203,8 @@ function nextCard() {
 }
 
 function updateProgress() {
-    const totalCards = flashcards.length;
+    const practiceCards = JSON.parse(sessionStorage.getItem('practiceCards')) || [];
+    const totalCards = practiceCards.length;
     const progress = ((currentCardIndex + 1) / totalCards) * 100;
     document.getElementById('progressBar').style.width = `${progress}%`;
     document.getElementById('cardsReviewed').textContent = currentCardIndex + 1;
