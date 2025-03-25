@@ -866,6 +866,26 @@ h1 .fas {
     color: var(--warning-color);
 }
 
+[data-category="English"] .fa-folder {
+    color: var(--accent-color);
+}
+
+[data-category="French"] .fa-folder {
+    color: #FF69B4;
+}
+
+[data-category="Information Technology"] .fa-folder {
+    color: #4169E1;
+}
+
+[data-category="Programming"] .fa-folder {
+    color: #32CD32;
+}
+
+[data-category="Teaching"] .fa-folder {
+    color: #9370DB;
+}
+
 /* Difficulty-specific icon colors */
 [data-difficulty="easy"] .fa-signal {
     color: var(--success-color);
@@ -905,6 +925,11 @@ h1 .fas {
 [data-category="Language"] { border-left: 4px solid var(--accent-color); }
 [data-category="History"] { border-left: 4px solid var(--secondary-color); }
 [data-category="General"] { border-left: 4px solid var(--warning-color); }
+[data-category="English"] { border-left: 4px solid var(--accent-color); }
+[data-category="French"] { border-left: 4px solid #FF69B4; }
+[data-category="Information Technology"] { border-left: 4px solid #4169E1; }
+[data-category="Programming"] { border-left: 4px solid #32CD32; }
+[data-category="Teaching"] { border-left: 4px solid #9370DB; }
 
 /* Search input specific styling */
 #searchCards {

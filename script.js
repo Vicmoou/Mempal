@@ -107,7 +107,9 @@ function startPractice() {
     const category = document.getElementById('practiceCategory').value;
     const difficulty = document.getElementById('practiceDifficulty').value;
     
-    let practiceCards = flashcards;
+    // Filter cards based on selected category and difficulty
+    let practiceCards = [...flashcards]; // Create a copy of flashcards array
+    
     if (category !== 'all') {
         practiceCards = practiceCards.filter(card => card.category === category);
     }
@@ -116,19 +118,23 @@ function startPractice() {
     }
 
     if (practiceCards.length === 0) {
-        alert('No cards available for practice with current filters');
+        alert('No cards available for practice with current filters. Try selecting different categories or difficulties.');
         return;
     }
 
-    // Shuffle cards
+    // Shuffle cards for random practice
     practiceCards = practiceCards.sort(() => Math.random() - 0.5);
     
+    // Update practice session setup
     currentCardIndex = 0;
     correctCount = 0;
     incorrectCount = 0;
     
     document.querySelector('.study-section').classList.add('hidden');
     document.getElementById('practiceMode').classList.remove('hidden');
+    
+    // Store practice cards for this session
+    sessionStorage.setItem('practiceCards', JSON.stringify(practiceCards));
     
     displayCurrentCard();
     startTimer();
@@ -241,19 +247,27 @@ function updateStatistics() {
     const totalReviews = flashcards.reduce((sum, card) => sum + card.stats.timesReviewed, 0);
     const totalCorrect = flashcards.reduce((sum, card) => sum + card.stats.correctAnswers, 0);
     
-    // Calculate category statistics
+    // Calculate category statistics including new categories
     const categoryStats = {};
+    const allCategories = ['General', 'Math', 'Science', 'English', 'History', 
+                          'French', 'Information Technology', 'Programming', 'Teaching'];
+    
+    // Initialize all categories with zero values
+    allCategories.forEach(category => {
+        categoryStats[category] = {
+            total: 0,
+            correct: 0,
+            reviews: 0
+        };
+    });
+    
+    // Update stats for existing cards
     flashcards.forEach(card => {
-        if (!categoryStats[card.category]) {
-            categoryStats[card.category] = {
-                total: 0,
-                correct: 0,
-                reviews: 0
-            };
+        if (categoryStats[card.category]) {
+            categoryStats[card.category].total++;
+            categoryStats[card.category].correct += card.stats.correctAnswers;
+            categoryStats[card.category].reviews += card.stats.timesReviewed;
         }
-        categoryStats[card.category].total++;
-        categoryStats[card.category].correct += card.stats.correctAnswers;
-        categoryStats[card.category].reviews += card.stats.timesReviewed;
     });
 
     // Display overall statistics

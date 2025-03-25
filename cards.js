@@ -89,7 +89,19 @@ function sortCards() {
             case 'oldest':
                 return a.id - b.id;
             case 'category':
-                return a.category.localeCompare(b.category);
+                // Define category order for consistent sorting
+                const categoryOrder = {
+                    'General': 0,
+                    'Math': 1,
+                    'Science': 2,
+                    'English': 3,
+                    'History': 4,
+                    'French': 5,
+                    'Information Technology': 6,
+                    'Programming': 7,
+                    'Teaching': 8
+                };
+                return (categoryOrder[a.category] || 999) - (categoryOrder[b.category] || 999);
             default:
                 return 0;
         }
